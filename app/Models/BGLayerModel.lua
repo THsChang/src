@@ -3,7 +3,7 @@ local BGLayerModel = class("BGLayerModel")
 BGLayerModel.CONSTANT = {
 
     BGELEMENT_ZORDER = 20,
-    ADD_BGELEMENT_INTERVAL_MIN = 1,
+    ADD_BGELEMENT_INTERVAL_MIN = 0.5,
     ADD_BGELEMENT_INTERVAL_MAX = 2,
 }
 
