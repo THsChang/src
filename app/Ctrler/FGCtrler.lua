@@ -3,7 +3,7 @@ local FGCtrler = class("FGCtrler", cc.Node)
 
 local DinoModel = import("..Models.DinoModel")
 local DinoSprite = import("..Views.DinoSprite")
-local BarrierModel = import("..Models.BarrierModel")
+local RepeatedSpriteModel = import("..Models.RepeatedSpriteModel")
 local BarrierSprite = import("..Views.BarrierSprite")
 local FGModel = import("..Models.FGModel")
 
@@ -11,7 +11,7 @@ local FGModel = import("..Models.FGModel")
 function FGCtrler:ctor(scrollSpeed)
     self.scrollSpeed_ = scrollSpeed
     self.DinoModel = DinoModel:create()
-    self.DinoSprite = DinoSprite:create("Cocos.png", self.DinoModel):addTo(self)
+    self.DinoSprite = DinoSprite:create("noUsagi.plist", self.DinoModel):addTo(self)
 
     self.Barriers = {}
     self.addBarrierInterval_ = 0
@@ -39,19 +39,19 @@ function FGCtrler:Update(dt)
     self.DinoSprite:Update(dt)
     self.addBarrierInterval_ = self.addBarrierInterval_ - dt
     if self.addBarrierInterval_ <= 0 then
-        print("Watashiwakita")
+        --print("Watashiwakita")
         local next = tostring(os.time()):reverse():sub(1, 6)
         math.randomseed(next)
         self.addBarrierInterval_ = 
             math.random(FGModel.CONSTANT.ADD_BARRIER_INTERVAL_MIN, FGModel.CONSTANT.ADD_BARRIER_INTERVAL_MAX)
         local newBarrierObj = 
-            FGModel:rndGenNewObj(BarrierSprite, BarrierModel, FGModel.OBJTYPE.BARRIER, self.scrollSpeed_):addTo(self)
+            FGModel:rndGenNewObj(BarrierSprite, RepeatedSpriteModel, FGModel.OBJTYPE.BARRIER, self.scrollSpeed_)
+        newBarrierObj:addTo(self, newBarrierObj:getModel():getZorder())
         --print("newBarrierObj"..newBarrierObj:getContentSize().width.." "..newBarrierObj:getContentSize().height)
         table.insert(self.Barriers, 1, newBarrierObj)
     end
-    print("self.Barriers"..#(self.Barriers))
+    --print("self.Barriers"..#(self.Barriers))
     for k, v in ipairs(self.Barriers) do
-        v:toString()
         v:Update(dt)
         if v:deleteSelf() then
             self.Barriers[k] = nil

@@ -5,9 +5,10 @@ local BGLayerView = class("BGLayerView", function(layerName)
 end)
 
 -- Ter = Terrain
-function BGLayerView:ctor(layerName, model)
+function BGLayerView:ctor(layerName, model, scrollSpeed)
     -- 將循環背景加入 Layer
     self.model_ = model
+    self.scrollSpeed_ = scrollSpeed
     self.ter1 = self:getChildByName("terrain")
     self.terSize = self.ter1:getContentSize()
     self.ter2 = cc.Sprite:createWithTexture(self.ter1:getTexture())
@@ -23,7 +24,7 @@ end
 function BGLayerView:moveBG()
     -- 無限循環背景
     local posTer = 
-        self.model_:loopTer(cc.p(self.ter1:getPosition()), cc.p(self.ter2:getPosition()), self.terSize)
+        self.model_:loopTer(cc.p(self.ter1:getPosition()), cc.p(self.ter2:getPosition()), self.terSize, self.scrollSpeed_)
     self.ter1:move(posTer[1])
     self.ter2:move(posTer[2])
 end

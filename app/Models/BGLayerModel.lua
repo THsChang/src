@@ -1,17 +1,18 @@
 local BGLayerModel = class("BGLayerModel")
 
-function BGLayerModel:ctor(scrollSpeed)
-    self.winSize_ = display.size
-    self.scrollSpeed_ = scrollSpeed
-    self.ZORDER_RNDOBJ = 20
-end
+BGLayerModel.CONSTANT = {
+
+    BGELEMENT_ZORDER = 20,
+    ADD_BGELEMENT_INTERVAL_MIN = 1,
+    ADD_BGELEMENT_INTERVAL_MAX = 2,
+}
 
 -- 處理無限循環背景(Update控制)
 local terFLAG = -1
-function BGLayerModel:loopTer(posTer1, posTer2, terSize)
+function BGLayerModel:loopTer(posTer1, posTer2, terSize, scrollSpeed)
     local targetPosTer
-    local retPos1 = cc.p(posTer1.x-self.scrollSpeed_, posTer1.y)
-    local retPos2 = cc.p(posTer2.x-self.scrollSpeed_, posTer2.y)
+    local retPos1 = cc.p(posTer1.x-scrollSpeed, posTer1.y)
+    local retPos2 = cc.p(posTer2.x-scrollSpeed, posTer2.y)
     
     if terFLAG == -1 then
         targetPosTer = retPos1
@@ -27,15 +28,23 @@ function BGLayerModel:loopTer(posTer1, posTer2, terSize)
     return {retPos1, retPos2}
 end
 
--- 隨機生成背景物件, e.g. 星星, 山巒, 雲, ... (Update控制)
-
--- 設定常數:背景物件的重生區間最小、最大值
-function BGLayerModel:randomCreateBGObj(dt)
-    -- 隨機給一計時變數於上述常數之最小~最大區間值
-    -- 使用"計時變數"每次loop減去 dt(Delta Time)
-    -- 當"計時變數" <= 0時隨機生成背景物件
-    -- 對隨機生成物件給予隨機移動速度, 需小於等於scrollSpeed_
-    -- 給一陣列存取所有背景物件,針對每個物件執行向左移動
+function BGLayerModel:rndGenNewObj(objSprite, objModel, scrollSpeed)
+    local params = {}
+    params.zorder_ = BGLayerModel.CONSTANT.BGELEMENT_ZORDER
+    -- 隨機生成障礙, 障礙大小
+    local next = tostring(os.time()):reverse():sub(1, 6)
+    math.randomseed(next)
+    params.initPosY_ = math.random(260, 640)
+    params.scaleFactor_ = 1 + math.random(0, 0.5)
+    local fileNr_ = math.random(1, #(objModel.BGELEMENT))
+    params.fileName_ = objModel.BGELEMENT[fileNr_]
+    params.scrollSpeed_ = scrollSpeed
+    local newObjModel = objModel:create(params)
+    
+    --print("newObjModel:getFileName()".. newObjModel:getFileName())
+    local newObjSprite = objSprite:create(newObjModel)
+    --print("rndGenNewObj newObjSprite: "..newObjSprite:getContentSize().width.." "..newObjSprite:getContentSize().height)
+    return newObjSprite
 end
 
 return BGLayerModel

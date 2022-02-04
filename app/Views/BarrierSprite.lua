@@ -1,7 +1,7 @@
 local BarrierSprite = class("BarrierSprite", function (model)
     --print("model:getFileName()"..model:getFileName())
     local sprite = display.newSprite(model:getFileName())
-    print("BarrierSprite self: "..sprite:getContentSize().width.." "..sprite:getContentSize().height)
+    --print("BarrierSprite self: "..sprite:getContentSize().width.." "..sprite:getContentSize().height)
     local body = cc.PhysicsBody:createBox(sprite:getContentSize())
     :setGravityEnable(false)
     :setRotationEnable(false)
@@ -25,27 +25,18 @@ function BarrierSprite:ctor(model)
     self:setTag(model:getTag()) ]]
 end
 
-function BarrierSprite:toString()
-    print("BarrierSprite")
-end
-
 function BarrierSprite:Update(dt)
-    print("BarrierSprite:Update")
+    --print("BarrierSprite:Update")
     self.model_:Update()
     self:move(self.model_:getPos())
 end
-
--- function BarrierSprite:getSprite()
---     return self.sprite
--- end
 
 function BarrierSprite:getModel()
     return self.model_
 end
 
-
 function BarrierSprite:deleteSelf()
-    if self.model_:getPos().x <= 0 then
+    if self.model_:getPos().x <= 0 - self:getContentSize().width*0.5 then
         self:removeSelf()
         return true
     end

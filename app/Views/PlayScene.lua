@@ -5,7 +5,7 @@ PlayScene.RESOURCE_FILENAME = "PlayScene.csb"
 local BGCtrler = import("..Ctrler.BGCtrler")
 local FGCtrler = import("..Ctrler.FGCtrler")
 
-local scrollSpeed = 5
+local scrollSpeed = 10
 function PlayScene:onCreate()
     self.BGCtrler = BGCtrler:create(scrollSpeed)
     :Start()

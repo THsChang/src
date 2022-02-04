@@ -17,7 +17,7 @@ function DinoModel:ctor()
     --[[ self.DINO_BITMASK
     self.DINO_TAG
     self.DINO_ZORDER ]]
-    self.position_ = cc.p(145, 170)
+    self.position_ = cc.p(145, 160)
     self.initPos_ = self.position_
     --self.animState_ = DinoModel.ANIMATION_TYPE.RUN
     self.isJumping_ = false
