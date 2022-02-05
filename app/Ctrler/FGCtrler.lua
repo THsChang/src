@@ -54,7 +54,7 @@ function FGCtrler:Update(dt)
     for k, v in ipairs(self.Barriers) do
         v:Update(dt)
         if v:deleteSelf() then
-            self.Barriers[k] = nil
+            table.remove(self.Barriers, k)
         end
     end
 end

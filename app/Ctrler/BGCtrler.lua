@@ -31,15 +31,12 @@ function BGCtrler:AddCloud(dt)
         math.randomseed(next)
         self.addCloudInterval_ = 
             math.random(BGLayerModel.CONSTANT.ADD_BGELEMENT_INTERVAL_MIN, BGLayerModel.CONSTANT.ADD_BGELEMENT_INTERVAL_MAX)
-        print("dt"..dt)
         
         local rndScrollSpeed = math.random(5, self.scrollSpeed_)
         local newElementObj = 
             BGLayerModel:rndGenNewObj(BGElementSprite, RepeatedSpriteModel, rndScrollSpeed)
         newElementObj:addTo(self.BGLayerView_, newElementObj:getModel():getZorder())
-        --print("newElementObj"..newElementObj:getContentSize().width.." "..newElementObj:getContentSize().height)
         table.insert(self.Clouds,1,newElementObj)
-        --self.Clouds[newElementObj] = newElementObj
     end
     for k,v in ipairs(self.Clouds) do
         v:Update(dt)
@@ -47,7 +44,6 @@ function BGCtrler:AddCloud(dt)
             table.remove(self.Clouds,k)
         end
     end
-    --print("self.Clouds"..#(self.Clouds))
 
     -- 隨機給一計時變數於上述常數之最小~最大區間值
     -- 使用"計時變數"每次loop減去 dt(Delta Time)
