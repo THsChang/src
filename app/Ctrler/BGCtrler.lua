@@ -17,6 +17,11 @@ function BGCtrler:Start()
     return self
 end
 
+function BGCtrler:Stop()
+    self:unscheduleUpdate()
+    return self
+end
+
 function BGCtrler:Update(dt)
     self.BGLayerView_:Update()
     self:AddCloud(dt)

@@ -3,7 +3,8 @@ local DinoModel = class("DinoModel")
 
 DinoModel.ANIMATION_TYPE = {
     RUN = "run", JUMP1 = "jump1", JUMP2 = "jump2",
-    JUMP3 = "jump3", JUMP4 = "jump4", CROUCH = "crouch", FIRE = "fire",
+    JUMP3 = "jump3", JUMP4 = "jump4", CROUCH = "crouch",
+    FIRE = "fire", DEAD = "dead"
 }
 
 function DinoModel:ctor()
@@ -22,6 +23,7 @@ function DinoModel:ctor()
     self.maxJumpSpeed_ = 15
     self.deltaSpeed_ = self.jumpSpeed_
     self.holdJumpIncre_ = 1.5   -- 必須大於fallSpeed
+    self.isLive = true
 end
 
 function DinoModel:getPosition()
@@ -36,6 +38,9 @@ function DinoModel:Update(dt)
     if self.isJumping_ then
         self.position_ = self:calcPos(dt)
     end
+    print("DinoModel:dead()")
+    print(self.isLive)
+    return self.isLive
 end
 local isJumpStop = false
 local isJumpFall = false
@@ -99,20 +104,29 @@ function DinoModel:run()
     self.animState_ = DinoModel.ANIMATION_TYPE.RUN
 end
 
---[[ 
 function DinoModel:crouch()
     -- make Sprite fall faster
-    self.fallSpeed_ = self.fallSpeed_ * 2
+    local inverse = 1
+    if  self.deltaSpeed_ > 0 then
+        inverse = -1
+    end
+    self.deltaSpeed_ = -15
     -- animation change to fall state
     self.animState_ = DinoModel.ANIMATION_TYPE.CROUCH
 end
 
 function DinoModel:unCrouch()
-    self.fallSpeed_ = self.fallSpeed_ * 0.5
     -- animation change to run state
     self.animState_ = DinoModel.ANIMATION_TYPE.RUN
 end
+function DinoModel:dead()
+    self.animState_ = DinoModel.ANIMATION_TYPE.DEAD
+    self.isLive = false
+    print("DinoModel:dead()")
+    print(self.isLive)
 
+end
+--[[ 
 function DinoModel:fire()
     self.animState_ = DinoModel.ANIMATION_TYPE.FIRE
 end

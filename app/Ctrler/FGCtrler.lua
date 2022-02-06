@@ -35,6 +35,11 @@ function FGCtrler:Start()
     return self
 end
 
+function FGCtrler:Stop()
+    self:unscheduleUpdate()
+    return self
+end
+
 function FGCtrler:Update(dt)
     self.DinoSprite:Update(dt)
     self.addBarrierInterval_ = self.addBarrierInterval_ - dt

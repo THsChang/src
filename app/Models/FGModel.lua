@@ -45,9 +45,20 @@ function FGModel:OnContactBegin(contact)
     local spriteA = contact:getShapeA():getBody():getNode()
     local spriteB = contact:getShapeB():getBody():getNode()
     print("Contacted SpriteA: "..spriteA:getTag().." SpriteB: "..spriteB:getTag())
-    if (spriteA and spriteA:getTag() == 1 and spriteB and spriteB:getTag() == 99) or
-    (spriteA and spriteA:getTag() == 99 and spriteB and spriteB:getTag() == 1) then
+    if (spriteA and spriteA:getTag() == 1 and spriteB and spriteB:getTag() == 2) or
+    (spriteA and spriteA:getTag() == 2 and spriteB and spriteB:getTag() == 1) then
         print("Contacted")
+        local dinoSprite = nil
+        local barrierSprite = nil
+        if spriteA:getTag()==1 then
+            dinoSprite = spriteA
+            barrierSprite = spriteB
+        else
+            dinoSprite = spriteB
+            barrierSprite = spriteA
+        end
+
+        dinoSprite:getModel():dead()
     end
 end
 

@@ -17,6 +17,7 @@ end)
 
 DinoSprite.frameNr = {
     ["run"] = 6,
+    ["dead"] = 1 ,
     ["crouch"] = 6 ,
     ["jump"] = {2,1,2,2}
 }
@@ -32,6 +33,7 @@ function DinoSprite:ctor(imageFilename, dinoModel)
     self.animAction = {
         ["run"] = self:createAimation("run"),
         ["crouch"] = self:createAimation("crouch"),
+        ["dead"] = self:createAimation("dead"),
         ["jump1"] = jumpAnimActions[1],
         ["jump2"] = jumpAnimActions[2],
         ["jump3"] = jumpAnimActions[3],
@@ -58,8 +60,14 @@ function DinoSprite:Update(dt)
         self:runAction(self.animAction[state])
         self.prevModelAniStatus = state
     end
-    self.model_:Update(dt)
-    self:move(self.model_:getPosition())
+    if self.model_:Update(dt) then
+        self:move(self.model_:getPosition())
+    else
+        local event = cc.EventCustom:new("DEADEVENT")
+        local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+        eventDispatcher:dispatchEvent(event)
+    end
+
 end
 
 function DinoSprite:chageAnim(event)
@@ -80,6 +88,7 @@ function DinoSprite:onKeyPressed(keyCode, event)
         return
     end
     if  keyCode == 29 then
+        self.model_:crouch()
         print("KEY down PRESSED")
         return
     end
@@ -95,6 +104,7 @@ function DinoSprite:onKeyReleased(keyCode, event)
         return
     end
     if  keyCode == 29 then
+        self.model_:unCrouch()
         print("KEY down PRESSED")
         return
     end
